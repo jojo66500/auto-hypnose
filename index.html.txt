@@ -1,0 +1,2381 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Séance d'Auto-Hypnose Guidée</title>
+    <style>
+        /* Palette de couleurs */
+        :root {
+            --deep-blue: #0A2463;
+            --orange: #FF7F50;
+            --pastel-blue: #A8D0E6;
+            --light-orange: #FFC8A2;
+            --dark-orange: #E25822;
+            --white: #FFFFFF;
+            --black: #000000;
+            --gray: #333333;
+            --light-gray: #F5F5F5;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--light-gray);
+            color: var(--gray);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            position: relative;
+            margin-bottom: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: var(--deep-blue);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        h2 {
+            color: var(--orange);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        h3 {
+            color: var(--deep-blue);
+            margin-bottom: 10px;
+            margin-top: 20px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        ul {
+            margin-bottom: 15px;
+            padding-left: 20px;
+        }
+        
+        li {
+            margin-bottom: 5px;
+        }
+        
+        /* Page system */
+        .page {
+            display: none;
+            margin-bottom: 20px;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        /* Intro page */
+        .intro-content {
+            text-align: center;
+            padding: 20px 0;
+        }
+        
+        .intro-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, var(--deep-blue), var(--pastel-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .spiral-small {
+            width: 80px;
+            height: 80px;
+            background: conic-gradient(
+                from 0deg,
+                var(--white) 0%,
+                var(--light-orange) 25%,
+                var(--orange) 50%,
+                var(--deep-blue) 75%,
+                var(--white) 100%
+            );
+            border-radius: 50%;
+            position: relative;
+            animation: rotate 30s linear infinite;
+        }
+        
+        .spiral-small::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50%;
+            height: 50%;
+            background: white;
+            border-radius: 50%;
+        }
+        
+        .steps-list {
+            text-align: left;
+            max-width: 500px;
+            margin: 20px auto;
+        }
+        
+        .steps-list li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .steps-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            background: var(--pastel-blue);
+            border-radius: 50%;
+        }
+        
+        /* Progress steps */
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px auto 45px; /* Augmenter la marge en bas */
+            max-width: 600px; /* Augmenter la largeur maximale */
+            position: relative;
+        }
+        
+        .progress-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #ddd;
+            z-index: 1;
+        }
+        
+        .progress-fill {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(to right, var(--pastel-blue), var(--orange));
+            z-index: 2;
+            transition: width 0.5s ease;
+        }
+        
+        .step {
+            width: 16px;
+            height: 16px;
+            background: #ddd;
+            border-radius: 50%;
+            position: relative;
+            z-index: 3;
+        }
+        
+        .step.active {
+            background: var(--orange);
+            box-shadow: 0 0 10px var(--orange);
+        }
+        
+        .step-label {
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem; /* Réduire légèrement la taille de la police */
+            white-space: nowrap;
+            color: #888;
+            text-align: center;
+            width: 85px; /* Augmenter la largeur des labels */
+        }
+        
+        .step.active .step-label {
+            color: var(--deep-blue);
+            font-weight: bold;
+        }
+        
+        /* Animations */
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes breathe {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        /* Hypnotic Elements */
+        .hypnotic-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 0;
+        }
+        
+        .spiral-container {
+            width: 300px;
+            height: 300px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .spiral {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                var(--white) 0%,
+                var(--light-orange) 10%,
+                var(--orange) 25%,
+                var(--deep-blue) 50%,
+                var(--pastel-blue) 75%,
+                var(--white) 100%
+            );
+            animation: rotate 20s linear infinite;
+            position: relative;
+            box-shadow: 0 0 30px rgba(10, 36, 99, 0.3);
+        }
+        
+        .spiral::before {
+            content: '';
+            position: absolute;
+            top: 5%;
+            left: 5%;
+            width: 90%;
+            height: 90%;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 180deg,
+                var(--white) 0%,
+                var(--pastel-blue) 25%,
+                var(--deep-blue) 50%,
+                var(--orange) 75%,
+                var(--light-orange) 90%,
+                var(--white) 100%
+            );
+            animation: rotate 15s linear infinite reverse;
+        }
+        
+        .spiral::after {
+            content: '';
+            position: absolute;
+            top: 15%;
+            left: 15%;
+            width: 70%;
+            height: 70%;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 90deg,
+                var(--white) 0%,
+                var(--light-orange) 10%,
+                var(--orange) 30%,
+                var(--deep-blue) 60%,
+                var(--pastel-blue) 85%,
+                var(--white) 100%
+            );
+            animation: rotate 10s linear infinite;
+        }
+        
+        .spiral-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+            z-index: 2;
+        }
+        
+        .focus-dot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            background: var(--deep-blue);
+            border-radius: 50%;
+            z-index: 3;
+        }
+        
+        /* Breath animation */
+        .coherence-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 20px auto;
+        }
+        
+        .breath-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 60px;
+            height: 60px;
+            background: var(--pastel-blue);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 20px rgba(168, 208, 230, 0.7);
+        }
+        
+        .breath-path {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px dashed rgba(10, 36, 99, 0.3);
+        }
+        
+        .breath-label {
+            position: absolute;
+            text-align: center;
+            font-size: 1rem;
+            color: var(--deep-blue);
+            font-weight: bold;
+            transition: opacity 0.3s ease;
+        }
+        
+        .breath-in-label {
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+        }
+        
+        .breath-out-label {
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+        }
+        
+        /* Instructions */
+        .instruction {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.3rem;
+            color: var(--deep-blue);
+            font-weight: bold;
+            transition: opacity 0.8s ease; /* Ajout d'une transition pour les changements de texte */
+            min-height: 4em; /* Hauteur minimale pour éviter les sauts de mise en page */
+        }
+        
+        .timer-display {
+            text-align: center;
+            font-size: 1.2rem;
+            margin: 10px 0;
+            color: var(--orange);
+            font-weight: bold;
+        }
+        
+        .coherence-instructions {
+            background: rgba(168, 208, 230, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 3px solid var(--pastel-blue);
+        }
+        
+        .counter {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--orange);
+            margin: 10px 0;
+            text-align: center;
+            transition: opacity 0.5s ease;
+        }
+        
+        .breath-indicator {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--pastel-blue);
+            margin: 20px auto;
+            animation: breathe 5s infinite ease-in-out;
+        }
+        
+        /* Audio controls */
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+            padding: 10px;
+            background: rgba(168, 208, 230, 0.2);
+            border-radius: 50px;
+        }
+        
+        .audio-toggle {
+            display: flex;
+            align-items: center;
+            margin: 10px;
+        }
+        
+        .audio-toggle label {
+            margin-right: 10px;
+            font-size: 0.9rem;
+            color: var(--deep-blue);
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: var(--orange);
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+        
+        .voice-selection {
+            display: flex;
+            align-items: center;
+            margin: 10px;
+        }
+        
+        .voice-selection label {
+            margin-right: 10px;
+            font-size: 0.9rem;
+            color: var(--deep-blue);
+        }
+        
+        .volume-control {
+            display: flex;
+            align-items: center;
+            margin: 10px;
+        }
+        
+        .volume-control label {
+            margin-right: 10px;
+            font-size: 0.9rem;
+            color: var(--deep-blue);
+        }
+        
+        .volume-slider {
+            width: 80px;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 5px;
+            border-radius: 5px;
+            background: #d3d3d3;
+            outline: none;
+        }
+        
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--orange);
+            cursor: pointer;
+        }
+        
+        .volume-slider::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--orange);
+            cursor: pointer;
+        }
+        
+        .speaking-indicator {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--orange);
+            display: inline-block;
+            margin-left: 10px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        
+        .speaking-indicator.active {
+            opacity: 1;
+            animation: pulse 1s infinite;
+        }
+        
+        /* Energy scene */
+        .energy-scene {
+            position: relative;
+            width: 100%;
+            height: 150px;
+            margin: 20px 0;
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+        
+        .energy-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, var(--orange), transparent 70%);
+            border-radius: 50%;
+            animation: pulse 3s infinite;
+        }
+        
+        /* Buttons */
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, var(--orange), var(--dark-orange));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            outline: none;
+            margin: 0 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-blue {
+            background: linear-gradient(135deg, var(--deep-blue), var(--pastel-blue));
+        }
+        
+        /* Responsive */
+        @media screen and (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            h2 {
+                font-size: 1.3rem;
+            }
+            
+            .spiral-container {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .instruction {
+                font-size: 1.1rem;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
+            
+            .audio-controls {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px;
+            }
+            
+            .coherence-container {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .step-label {
+                font-size: 0.6rem;
+                width: 60px;
+            }
+            
+            .progress-steps {
+                max-width: 100%;
+                margin: 20px auto 50px;
+            }
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 10px;
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 20px;
+        }
+        
+        /* Nouvelles animations pour l'exploration */
+        .exploration-scene {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 20px auto;
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+
+        .exploration-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, var(--pastel-blue) 0%, transparent 70%);
+            border-radius: 50%;
+            opacity: 0.3;
+            transform-origin: center;
+            animation: breathe 8s infinite ease-in-out;
+        }
+
+        .exploration-ring {
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            width: 80%;
+            height: 80%;
+            border: 3px solid rgba(255, 127, 80, 0.3);
+            border-radius: 50%;
+            animation: rotate 30s linear infinite;
+        }
+
+        .exploration-ring:nth-child(2) {
+            top: 20%;
+            left: 20%;
+            width: 60%;
+            height: 60%;
+            border-color: rgba(10, 36, 99, 0.2);
+            animation-duration: 40s;
+            animation-direction: reverse;
+        }
+
+        .exploration-ring:nth-child(3) {
+            top: 30%;
+            left: 30%;
+            width: 40%;
+            height: 40%;
+            border-color: rgba(168, 208, 230, 0.4);
+            animation-duration: 20s;
+        }
+
+        .exploration-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--orange);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 1s ease, transform 10s ease;
+        }
+
+        .exploration-progress {
+            position: relative;
+            width: 80%;
+            height: 4px;
+            background: rgba(168, 208, 230, 0.2);
+            border-radius: 4px;
+            margin: 20px auto;
+            overflow: hidden;
+        }
+
+        .exploration-progress-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0;
+            background: linear-gradient(to right, var(--pastel-blue), var(--orange));
+            transition: width 1s ease;
+        }
+        
+        /* Animation d'escalier hypnotique */
+        .staircase-container {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            margin: 20px auto;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+
+        .staircase {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotateStairs 20s infinite linear;
+        }
+
+        @keyframes rotateStairs {
+            0% {
+                transform: rotateY(0) rotateX(60deg);
+            }
+            100% {
+                transform: rotateY(360deg) rotateX(60deg);
+            }
+        }
+
+        .stair {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            border-radius: 50%;
+            left: 0;
+            top: 0;
+            opacity: 0.8;
+        }
+
+        .stair-1 { transform: translateZ(0px); background: rgba(10, 36, 99, 0.2); }
+        .stair-2 { transform: translateZ(-10px); background: rgba(168, 208, 230, 0.3); }
+        .stair-3 { transform: translateZ(-20px); background: rgba(255, 127, 80, 0.2); }
+        .stair-4 { transform: translateZ(-30px); background: rgba(10, 36, 99, 0.2); }
+        .stair-5 { transform: translateZ(-40px); background: rgba(168, 208, 230, 0.3); }
+        .stair-6 { transform: translateZ(-50px); background: rgba(255, 127, 80, 0.2); }
+        .stair-7 { transform: translateZ(-60px); background: rgba(10, 36, 99, 0.2); }
+        .stair-8 { transform: translateZ(-70px); background: rgba(168, 208, 230, 0.3); }
+        .stair-9 { transform: translateZ(-80px); background: rgba(255, 127, 80, 0.2); }
+        .stair-10 { transform: translateZ(-90px); background: rgba(10, 36, 99, 0.2); }
+
+        /* Petits points lumineux qui descendent */
+        .stair-dots-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            transform-style: preserve-3d;
+            animation: floatDown 8s infinite linear;
+        }
+
+        @keyframes floatDown {
+            0% {
+                transform: translateZ(50px);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateZ(-100px);
+                opacity: 0;
+            }
+        }
+
+        .stair-dot {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--orange);
+            border-radius: 50%;
+            box-shadow: 0 0 5px var(--orange);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Séance d'Auto-Hypnose Guidée</h1>
+        </header>
+        
+        <!-- Navigation steps -->
+        <div class="progress-steps">
+            <div class="progress-line"></div>
+            <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            <div class="step active" id="step1">
+                <div class="step-label">Accueil</div>
+            </div>
+            <div class="step" id="step2">
+                <div class="step-label">Préparation</div>
+            </div>
+            <div class="step" id="step3">
+                <div class="step-label">Induction</div>
+            </div>
+            <div class="step" id="step4">
+                <div class="step-label">Profondeur</div>
+            </div>
+            <div class="step" id="step5">
+                <div class="step-label">Exploration</div>
+            </div>
+            <div class="step" id="step6">
+                <div class="step-label">Retour</div>
+            </div>
+        </div>
+        
+        <!-- Page d'accueil -->
+        <div class="page active" id="page1">
+            <div class="intro-content">
+                <div class="intro-icon">
+                    <div class="spiral-small"></div>
+                </div>
+                <h2>Bienvenue à votre séance d'auto-hypnose</h2>
+                <div class="intro-text">
+                    <p>Cette séance est conçue pour vous guider progressivement vers un état hypnotique à travers une série d'exercices.</p>
+                    <p>Prenez le temps de vous installer confortablement dans un endroit calme où vous ne serez pas dérangé(e) pendant environ 15 minutes.</p>
+                    
+                    <div class="audio-controls">
+                        <div class="audio-toggle">
+                            <label for="audioToggle">Guidage vocal</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="audioToggle" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <div class="speaking-indicator" id="speakingIndicator"></div>
+                        </div>
+                        
+                        <div class="voice-selection">
+                            <label for="voiceSelect">Voix</label>
+                            <select id="voiceSelect">
+                                <option value="default">Chargement des voix...</option>
+                            </select>
+                        </div>
+                        
+                        <div class="volume-control">
+                            <label for="volumeSlider">Volume</label>
+                            <input type="range" min="0" max="1" step="0.1" value="0.8" class="volume-slider" id="volumeSlider">
+                        </div>
+                    </div>
+                    
+                    <div class="steps-list">
+                        <p><strong>Voici les étapes que nous allons suivre :</strong></p>
+                        <ul>
+                            <li>Préparation et relaxation</li>
+                            <li>Induction hypnotique visuelle</li>
+                            <li>Approfondissement de l'état</li>
+                            <li>Exploration de la transe</li>
+                            <li>Retour en conscience ordinaire</li>
+                        </ul>
+                    </div>
+                    
+                    <p><strong>Important :</strong> Cette expérience est à but éducatif. Ne pratiquez pas cette séance si vous conduisez ou utilisez une machine. Si vous souffrez d'épilepsie ou de problèmes psychiatriques, consultez un professionnel avant d'essayer l'auto-hypnose.</p>
+                </div>
+            </div>
+            <div class="btn-container">
+                <button class="btn" id="startBtn">Commencer la séance</button>
+            </div>
+        </div>
+        
+        <!-- Page de préparation -->
+        <div class="page" id="page2">
+            <h2>Préparation - Cohérence Cardiaque</h2>
+            
+            <div id="coherenceIntroduction">
+                <div class="coherence-instructions">
+                    <h3>Qu'est-ce que la cohérence cardiaque ?</h3>
+                    <p>La cohérence cardiaque est une technique de respiration qui aide à synchroniser votre rythme cardiaque et votre respiration. Elle permet d'induire rapidement un état de calme et de détente, idéal avant une séance d'hypnose.</p>
+                    
+                    <h3>Comment pratiquer :</h3>
+                    <ul>
+                        <li>Respirez lentement, à raison de 6 respirations par minute (5 secondes d'inspiration, 5 secondes d'expiration)</li>
+                        <li>Suivez le mouvement du cercle bleu : montée = inspiration, descente = expiration</li>
+                        <li>Gardez une respiration fluide et régulière, sans à-coups</li>
+                        <li>Vous pouvez fermer les yeux après vous être familiarisé avec le rythme - la voix vous guidera</li>
+                    </ul>
+                </div>
+                
+                <div class="btn-container">
+                    <button class="btn" id="startCoherenceBtn">Commencer la cohérence cardiaque</button>
+                </div>
+            </div>
+            
+            <div id="coherenceContainer" style="display: none;">
+                <div class="hypnotic-container">
+                    <div class="coherence-container">
+                        <div class="breath-path"></div>
+                        <div class="breath-circle" id="breathCircle"></div>
+                        <div class="breath-label breath-in-label" id="breathInLabel">Inspirez</div>
+                        <div class="breath-label breath-out-label" id="breathOutLabel">Expirez</div>
+                    </div>
+                    
+                    <div class="timer-display" id="timerDisplay">02:00</div>
+                    
+                    <div class="instruction" id="coherenceInstruction">
+                        Suivez le rythme du cercle pour votre respiration
+                    </div>
+                </div>
+                
+                <div class="btn-container">
+                    <button class="btn" id="nextPrepBtn">Continuer</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Page d'induction -->
+        <div class="page" id="page3">
+            <h2>Induction Hypnotique</h2>
+            
+            <div class="hypnotic-container">
+                <div class="spiral-container">
+                    <div class="spiral"></div>
+                    <div class="spiral-center"></div>
+                    <div class="focus-dot"></div>
+                </div>
+                
+                <div class="instruction" id="inductionInstruction">
+                    Fixez votre regard sur le point central
+                </div>
+                <div class="counter" id="inductionCounter">10</div>
+            </div>
+            
+            <div class="btn-container">
+                <button class="btn" id="skipInductionBtn">Passer cette étape</button>
+            </div>
+        </div>
+        
+        <!-- Page d'approfondissement -->
+        <div class="page" id="page4">
+            <h2>Profondeur</h2>
+            
+            <div class="hypnotic-container">
+                <div class="instruction" id="deepeningInstruction">
+                    Imaginez un escalier qui descend doucement...
+                </div>
+                
+                <div class="counter" id="stairsCounter">10</div>
+                
+                <p>À chaque marche descendue, vous vous sentez de plus en plus détendu(e), de plus en plus calme...</p>
+                
+                <!-- Nouvel escalier hypnotique remplaçant le rond bleu -->
+                <div class="staircase-container">
+                    <div class="staircase">
+                        <div class="stair stair-1"></div>
+                        <div class="stair stair-2"></div>
+                        <div class="stair stair-3"></div>
+                        <div class="stair stair-4"></div>
+                        <div class="stair stair-5"></div>
+                        <div class="stair stair-6"></div>
+                        <div class="stair stair-7"></div>
+                        <div class="stair stair-8"></div>
+                        <div class="stair stair-9"></div>
+                        <div class="stair stair-10"></div>
+                    </div>
+                    <!-- Points lumineux qui descendent -->
+                    <div class="stair-dots-container" id="stairDotsContainer"></div>
+                </div>
+            </div>
+            
+            <div class="btn-container">
+                <button class="btn" id="skipDeepeningBtn">Passer cette étape</button>
+            </div>
+        </div>
+        
+        <!-- Page d'exploration -->
+        <div class="page" id="page5">
+            <h2>Exploration et Approfondissement</h2>
+            
+            <div class="hypnotic-container">
+                <div class="instruction" id="explorationInstruction">
+                    Imaginez un lieu de paix et de sécurité. Un endroit où vous vous sentez parfaitement bien et détendu(e).
+                </div>
+                
+                <!-- Point bleu supprimé -->
+                
+                <!-- Nouvelle scène d'exploration avec animations -->
+                <div class="exploration-scene" id="explorationScene">
+                    <div class="exploration-background"></div>
+                    <div class="exploration-ring"></div>
+                    <div class="exploration-ring"></div>
+                    <div class="exploration-ring"></div>
+                    <!-- Les particules seront ajoutées dynamiquement -->
+                </div>
+
+                <div class="exploration-progress">
+                    <div class="exploration-progress-fill" id="explorationProgress"></div>
+                </div>
+                
+                <p>À chaque respiration, sentez-vous descendre plus profondément dans un état de relaxation et de bien-être.</p>
+                <p>Prenez le temps d'explorer ce lieu intérieur, de ressentir ses qualités et les sensations qu'il évoque en vous.</p>
+            </div>
+            
+            <div class="btn-container">
+                <button class="btn" id="nextExplorationBtn">Passer cette étape</button>
+            </div>
+        </div>
+        
+        <!-- Page de retour -->
+        <div class="page" id="page6">
+            <h2>Retour à la Conscience Ordinaire</h2>
+            
+            <div class="hypnotic-container">
+                <div class="energy-scene" id="energyScene">
+                    <div class="energy-glow"></div>
+                </div>
+                
+                <div class="instruction">
+                    Préparez-vous à revenir doucement, plein(e) d'énergie et de bien-être
+                </div>
+                <div class="counter" id="awakeningCounter">5</div>
+                
+                <p>Je vais compter de 5 à 1. À 1, vous serez parfaitement éveillé(e), revigoré(e) et plein(e) d'énergie positive.</p>
+            </div>
+            
+            <div class="btn-container">
+                <button class="btn" id="completeBtn">Terminer la séance</button>
+            </div>
+        </div>
+        
+        <!-- Page finale -->
+        <div class="page" id="page7">
+            <div class="intro-content">
+                <div class="intro-icon">
+                    <div class="spiral-small" style="animation: rotate 30s linear infinite reverse;"></div>
+                </div>
+                <h2>Séance Complétée</h2>
+                <div class="intro-text">
+                    <p>Félicitations pour avoir complété cette séance d'auto-hypnose guidée.</p>
+                    <p>Comment vous sentez-vous ? Prenez un moment pour observer les sensations dans votre corps et dans votre esprit.</p>
+                    <p>Chaque pratique de l'auto-hypnose renforce votre capacité à entrer dans cet état bénéfique. Nous vous recommandons de pratiquer régulièrement pour approfondir votre expérience.</p>
+                    
+                    <h3>Effets possibles que vous avez pu ressentir :</h3>
+                    <ul class="steps-list">
+                        <li>Sensation de lourdeur ou de légèreté</li>
+                        <li>Relaxation musculaire profonde</li>
+                        <li>Altération de la perception du temps</li>
+                        <li>Détachement des pensées quotidiennes</li>
+                        <li>Créativité et imagination accrues</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="btn-container">
+                <button class="btn" id="restartBtn">Refaire la séance</button>
+                <button class="btn btn-blue" id="homeBtn">Retour à l'accueil</button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Cette application est conçue à des fins éducatives. Consultez un professionnel pour toute utilisation thérapeutique de l'hypnose.</p>
+    </footer>
+    
+    <script>
+        // Éléments DOM principaux
+        const pages = document.querySelectorAll('.page');
+        const steps = document.querySelectorAll('.step');
+        const progressFill = document.getElementById('progressFill');
+        
+        // Contrôles audio
+        const audioToggle = document.getElementById('audioToggle');
+        const voiceSelect = document.getElementById('voiceSelect');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const speakingIndicator = document.getElementById('speakingIndicator');
+        
+        // Éléments de la cohérence cardiaque
+        const coherenceIntro = document.getElementById('coherenceIntroduction');
+        const coherenceContainer = document.getElementById('coherenceContainer');
+        const breathCircle = document.getElementById('breathCircle');
+        const breathInLabel = document.getElementById('breathInLabel');
+        const breathOutLabel = document.getElementById('breathOutLabel');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const coherenceInstruction = document.getElementById('coherenceInstruction');
+        
+        // Boutons
+        const startBtn = document.getElementById('startBtn');
+        const startCoherenceBtn = document.getElementById('startCoherenceBtn');
+        const nextPrepBtn = document.getElementById('nextPrepBtn');
+        const skipInductionBtn = document.getElementById('skipInductionBtn');
+        const skipDeepeningBtn = document.getElementById('skipDeepeningBtn');
+        const nextExplorationBtn = document.getElementById('nextExplorationBtn');
+        const completeBtn = document.getElementById('completeBtn');
+        const restartBtn = document.getElementById('restartBtn');
+        const homeBtn = document.getElementById('homeBtn');
+        
+        // Autres éléments
+        const inductionInstruction = document.getElementById('inductionInstruction');
+        const inductionCounter = document.getElementById('inductionCounter');
+        const deepeningInstruction = document.getElementById('deepeningInstruction');
+        const stairsCounter = document.getElementById('stairsCounter');
+        const explorationInstruction = document.getElementById('explorationInstruction');
+        const awakeningCounter = document.getElementById('awakeningCounter');
+        const energyScene = document.getElementById('energyScene');
+        
+        // Variables d'état
+        let currentPage = 1;
+        let speakingInProgress = false;
+        let coherenceTimer;
+        let coherenceInterval;
+        let secondsRemaining = 120;
+        
+        // Initialisation de la synthèse vocale
+        const speech = {
+            synth: window.speechSynthesis,
+            voices: [],
+            selectedVoice: null,
+            volume: 0.8,
+            rate: 0.8,  // Ralenti davantage pour plus de stabilité
+            resumeTimer: null,
+            utteranceQueue: [], // Pour suivre les utterances en cours
+            
+            init: function() {
+                try {
+                    // Vérifier si la synthèse vocale est disponible
+                    if (!this.synth) {
+                        audioToggle.checked = false;
+                        audioToggle.disabled = true;
+                        return false;
+                    }
+                    
+                    // Fonction pour charger les voix
+                    const loadVoices = () => {
+                        this.voices = this.synth.getVoices();
+                        this.populateVoiceList();
+                        
+                        // Si des voix sont disponibles, utiliser la première par défaut
+                        if (this.voices.length > 0) {
+                            this.selectedVoice = this.voices[0];
+                        }
+                    };
+                    
+                    // Vérifier si les voix sont déjà disponibles
+                    if (this.synth.getVoices().length > 0) {
+                        loadVoices();
+                    }
+                    
+                    // Sinon, attendre l'événement 'voiceschanged'
+                    if (this.synth.onvoiceschanged !== undefined) {
+                        this.synth.onvoiceschanged = loadVoices;
+                    }
+                    
+                    // Événements de contrôle
+                    voiceSelect.addEventListener('change', () => {
+                        const selectedIndex = voiceSelect.selectedIndex;
+                        if (selectedIndex >= 0 && selectedIndex < this.voices.length) {
+                            this.selectedVoice = this.voices[selectedIndex];
+                            
+                            // Tester la voix
+                            this.speak("Cette voix a été sélectionnée");
+                        }
+                    });
+                    
+                    volumeSlider.addEventListener('input', () => {
+                        this.volume = parseFloat(volumeSlider.value);
+                    });
+                    
+                    // Prévenir la suspension de la synthèse vocale
+                    this.setupVoiceKeepAlive();
+                    
+                    return true;
+                } catch (error) {
+                    return false;
+                }
+            },
+            
+            setupVoiceKeepAlive: function() {
+                // Mécanisme pour maintenir la synthèse vocale active en permanence
+                const keepAlive = () => {
+                    // Si la synthèse est en cours, appliquer le hack pause/resume
+                    if (this.synth && this.synth.speaking) {
+                        this.synth.pause();
+                        this.synth.resume();
+                    }
+                };
+                
+                // Exécuter le keepAlive toutes les 250ms quand une synthèse est active
+                setInterval(keepAlive, 250);
+                
+                // Événement de changement de visibilité de la page
+                document.addEventListener('visibilitychange', () => {
+                    if (!document.hidden && this.synth) {
+                        // L'utilisateur est revenu sur la page, réveiller la synthèse
+                        keepAlive();
+                    }
+                });
+                
+                // Ping périodique pour garder le moteur de synthèse actif
+                setInterval(() => {
+                    if (this.synth && !this.synth.speaking) {
+                        // Envoyer un signal silencieux pour maintenir le moteur actif
+                        const dummy = new SpeechSynthesisUtterance('');
+                        dummy.volume = 0;
+                        dummy.onend = function() {
+                            // Ne rien faire, juste pour maintenir le moteur actif
+                        };
+                        this.synth.speak(dummy);
+                    }
+                }, 10000);
+            },
+            
+            populateVoiceList: function() {
+                // Vider la liste existante
+                voiceSelect.innerHTML = '';
+                
+                // Trier les voix par langue et nom
+                const sortedVoices = [...this.voices].sort((a, b) => {
+                    // Priorité aux voix françaises
+                    const aIsFrench = a.lang && (a.lang.includes('fr') || a.lang.includes('FR'));
+                    const bIsFrench = b.lang && (b.lang.includes('fr') || b.lang.includes('FR'));
+                    
+                    if (aIsFrench && !bIsFrench) return -1;
+                    if (!aIsFrench && bIsFrench) return 1;
+                    
+                    // Ensuite par nom
+                    return a.name.localeCompare(b.name);
+                });
+                
+                // Ajouter chaque voix à la liste
+                sortedVoices.forEach((voice, index) => {
+                    const option = document.createElement('option');
+                    option.value = index;
+                    
+                    // Formater le nom de la voix avec la langue
+                    let displayName = voice.name;
+                    if (voice.lang) {
+                        displayName += ` (${voice.lang})`;
+                    }
+                    
+                    option.textContent = displayName;
+                    option.setAttribute('data-voice-index', index);
+                    voiceSelect.appendChild(option);
+                    
+                    // Stocker la référence à la voix dans notre tableau
+                    this.voices[index] = voice;
+                });
+                
+                // Si des voix françaises sont disponibles, sélectionner la première par défaut
+                const frenchOption = Array.from(voiceSelect.options).find(option => {
+                    const voiceIndex = parseInt(option.getAttribute('data-voice-index'));
+                    const voice = this.voices[voiceIndex];
+                    return voice.lang && (voice.lang.includes('fr') || voice.lang.includes('FR'));
+                });
+                
+                if (frenchOption) {
+                    frenchOption.selected = true;
+                    const voiceIndex = parseInt(frenchOption.getAttribute('data-voice-index'));
+                    this.selectedVoice = this.voices[voiceIndex];
+                } else if (voiceSelect.options.length > 0) {
+                    // Sinon, utiliser la première voix disponible
+                    voiceSelect.options[0].selected = true;
+                    this.selectedVoice = this.voices[0];
+                }
+            },
+            
+            speak: function(text) {
+                try {
+                    // Vérifier si le son est activé
+                    if (!audioToggle.checked || !this.synth || !text) {
+                        return;
+                    }
+                    
+                    // Créer un nouvel énoncé
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    
+                    // Configurer l'énoncé avec la voix sélectionnée
+                    if (this.selectedVoice) {
+                        utterance.voice = this.selectedVoice;
+                    }
+                    
+                    utterance.volume = this.volume;
+                    utterance.rate = this.rate;
+                    
+                    // Suivre cet utterance
+                    this.utteranceQueue.push(utterance);
+                    
+                    // Ajouter des événements avec des délais pour assurer la stabilité
+                    utterance.onstart = function() {
+                        setTimeout(function() {
+                            speakingInProgress = true;
+                            speakingIndicator.classList.add('active');
+                        }, 50);
+                    };
+                    
+                    utterance.onend = function() {
+                        // Retirer cet utterance de la file d'attente
+                        const index = speech.utteranceQueue.indexOf(utterance);
+                        if (index !== -1) {
+                            speech.utteranceQueue.splice(index, 1);
+                        }
+                        
+                        // Petit délai pour éviter les problèmes de timing
+                        setTimeout(function() {
+                            // Ne mettre fin que si aucune autre utterance n'est en cours
+                            if (speech.utteranceQueue.length === 0) {
+                                speakingInProgress = false;
+                                speakingIndicator.classList.remove('active');
+                            }
+                        }, 100);
+                    };
+                    
+                    utterance.onerror = function(e) {
+                        // Retirer cet utterance de la file d'attente
+                        const index = speech.utteranceQueue.indexOf(utterance);
+                        if (index !== -1) {
+                            speech.utteranceQueue.splice(index, 1);
+                        }
+                        
+                        // Petit délai pour éviter les problèmes de timing
+                        setTimeout(function() {
+                            // Ne mettre fin que si aucune autre utterance n'est en cours
+                            if (speech.utteranceQueue.length === 0) {
+                                speakingInProgress = false;
+                                speakingIndicator.classList.remove('active');
+                            }
+                        }, 100);
+                    };
+                    
+                    // Prononcer le texte avec un léger délai pour stabiliser
+                    setTimeout(() => {
+                        this.synth.speak(utterance);
+                    }, 50);
+                    
+                } catch (error) {
+                    // Ignorer les erreurs silencieusement
+                    speakingInProgress = false;
+                }
+            },
+            
+            // Arrêter toute la synthèse vocale proprement
+            stop: function() {
+                // Arrêter tous les minuteurs
+                if (this.resumeTimer) {
+                    clearInterval(this.resumeTimer);
+                    this.resumeTimer = null;
+                }
+                
+                // Annuler toutes les paroles
+                if (this.synth) {
+                    // Double annulation pour s'assurer que tout est bien arrêté
+                    this.synth.cancel();
+                    setTimeout(() => this.synth.cancel(), 50);
+                }
+                
+                // Réinitialiser les états
+                this.utteranceQueue = [];
+                speakingInProgress = false;
+                speakingIndicator.classList.remove('active');
+            }
+        };
+        
+        // Parler un texte avec un mécanisme de file d'attente
+        // pour éviter les problèmes de synthèse vocale qui s'arrête
+        let speechQueue = [];
+        let isSpeaking = false;
+        let waitingForNextSpeech = false;
+        
+        // Version améliorée qui inclut un élément de texte à mettre à jour
+        function queueSpeech(text, delay, textElement) {
+            if (!text || text.trim() === '') return;
+            
+            if (delay === undefined) delay = 0;
+            
+            speechQueue.push({text, delay, textElement});
+            
+            // Si rien n'est en cours, démarrer le traitement
+            if (!isSpeaking && !waitingForNextSpeech) {
+                processSpeechQueue();
+            }
+        }
+        
+        function processSpeechQueue() {
+            if (speechQueue.length === 0) {
+                isSpeaking = false;
+                waitingForNextSpeech = false;
+                return;
+            }
+            
+            isSpeaking = true;
+            const nextSpeech = speechQueue.shift();
+            
+            // Mettre à jour l'élément de texte avant de commencer à parler
+            if (nextSpeech.textElement && typeof nextSpeech.textElement === 'object') {
+                nextSpeech.textElement.textContent = nextSpeech.text;
+            }
+            
+            // Attendre le délai spécifié avant de parler
+            setTimeout(function() {
+                // Maintenant parler le texte
+                if (nextSpeech && nextSpeech.text) {
+                    speech.speak(nextSpeech.text);
+                }
+                
+                // Attendre que la parole soit terminée avant de continuer
+                // Utiliser une durée estimée généreuse pour éviter les chevauchements
+                const estimatedDuration = 
+                    Math.max(nextSpeech.text.length * 200, 5000); // 200ms par caractère, minimum 5 secondes
+                
+                waitingForNextSpeech = true;
+                
+                setTimeout(function() {
+                    waitingForNextSpeech = false;
+                    processSpeechQueue();
+                }, estimatedDuration);
+                
+            }, nextSpeech.delay);
+        }
+        
+        // Fonction pour afficher une page
+        function showPage(pageNumber) {
+            // Annuler TOUS les timers en cours pour éviter les chevauchements
+            const highestTimeoutId = setTimeout(";");
+            for (let i = 0; i < highestTimeoutId; i++) {
+                clearTimeout(i); 
+            }
+            
+            // Interrompre proprement toute synthèse vocale
+            speech.stop();
+            
+            // Stopper toutes les animations et séquences
+            speech.utteranceQueue = [];
+            speechQueue = [];
+            isSpeaking = false;
+            waitingForNextSpeech = false;
+            speakingInProgress = false;
+            
+            // Arrêter les intervalles de la cohérence cardiaque si actifs
+            if (coherenceInterval) {
+                clearInterval(coherenceInterval);
+                coherenceInterval = null;
+            }
+            
+            if (coherenceTimer) {
+                clearInterval(coherenceTimer);
+                coherenceTimer = null;
+            }
+            
+            // Masquer toutes les pages
+            pages.forEach(function(page) {
+                page.classList.remove('active');
+            });
+            
+            // Afficher la page demandée
+            document.getElementById('page' + pageNumber).classList.add('active');
+            
+            // Mettre à jour la navigation
+            updateSteps(pageNumber);
+            
+            // Mettre à jour l'état actuel
+            currentPage = pageNumber;
+            
+            // Défiler vers le haut
+            window.scrollTo(0, 0);
+            
+            // Exécuter les actions spécifiques à la page après un délai plus long
+            // pour s'assurer que toutes les voix précédentes sont bien arrêtées
+            setTimeout(function() {
+                switch (pageNumber) {
+                    case 1:
+                        // Page d'accueil
+                        const homeText = "Bienvenue dans votre séance d'auto-hypnose guidée.";
+                        document.querySelector('#page1 .intro-text p:first-child').textContent = homeText;
+                        queueSpeech(homeText);
+                        break;
+                        
+                    case 2:
+                        // Page de préparation
+                        resetCoherenceCardiaque();
+                        break;
+                        
+                    case 3:
+                        // Induction
+                        startInduction();
+                        break;
+                    
+                    case 4:
+                        // Profondeur
+                        startDeepening();
+                        break;
+                        
+                    case 5:
+                        // Exploration
+                        startExploration();
+                        break;
+                        
+                    case 6:
+                        // Retour
+                        startAwakening();
+                        break;
+                }
+            }, 1200); // Délai significativement augmenté pour s'assurer de la fin des voix
+        }
+        
+        // Mettre à jour les étapes de navigation
+        function updateSteps(currentStep) {
+            // Limiter à 6 étapes max (inclut la nouvelle étape d'approfondissement)
+            if (currentStep > 6) currentStep = 6;
+            
+            // Réinitialiser toutes les étapes
+            steps.forEach(function(step) {
+                step.classList.remove('active');
+            });
+            
+            // Activer l'étape actuelle
+            document.getElementById('step' + currentStep).classList.add('active');
+            
+            // Mettre à jour la barre de progression
+            const progressPercent = ((currentStep - 1) / 5) * 100;  // 5 étapes au total (de 1 à 6)
+            progressFill.style.width = progressPercent + '%';
+        }
+        
+        // Obtenir le texte pour chaque marche
+        function getStairText(step) {
+            return {
+                10: "Marche 10. Vous commencez à descendre, sentez la relaxation envahir votre corps.",
+                9: "Marche 9. Vos épaules se détendent, et votre respiration devient plus profonde.",
+                8: "Marche 8. Vos bras et vos mains deviennent lourds, agréablement détendus.",
+                7: "Marche 7. La sensation de calme se diffuse dans tout votre corps.",
+                6: "Marche 6. Vous descendez plus profondément, vos jambes sont maintenant complètement détendues.",
+                5: "Marche numéro cinq. À mi-chemin, vous vous sentez parfaitement à l'aise, en sécurité.",
+                4: "Marche 4. Votre esprit se calme, les pensées ralentissent.",
+                3: "Marche 3. Presque arrivé, vous êtes maintenant dans un état de relaxation profonde.",
+                2: "Marche 2. Votre conscience intérieure s'éveille tandis que votre corps se relaxe totalement.",
+                1: "Marche une. Vous êtes arrivé dans cet état d'hypnose profonde et agréable.",
+                0: ""
+            }[step] || "";
+        }
+        
+        // Obtenir le texte pour chaque compte du réveil
+        function getCountText(count) {
+            return {
+                5: "Commencez à prendre conscience de votre corps.",
+                4: "Sentez l'énergie revenir progressivement.",
+                3: "Vous pouvez bouger légèrement vos doigts et vos orteils.",
+                2: "Respirez plus profondément, sentez-vous revigoré.",
+                1: "Préparez-vous à ouvrir les yeux, en pleine forme.",
+                0: ""
+            }[count] || "";
+        }
+        
+        // Démarrer la cohérence cardiaque
+        function startCoherenceCardiaque() {
+            // Cacher l'intro et montrer l'animation
+            coherenceIntro.style.display = 'none';
+            coherenceContainer.style.display = 'block';
+            
+            // Réinitialiser le timer
+            secondsRemaining = 120;
+            updateTimerDisplay();
+            
+            // Instructions initiales
+            const initialText = "Nous allons pratiquer la cohérence cardiaque pendant 2 minutes. Suivez le mouvement du cercle. Quand il monte, inspirez. Quand il descend, expirez.";
+            coherenceInstruction.textContent = initialText;
+            queueSpeech(initialText);
+            
+            // Démarrer l'animation après un court délai
+            setTimeout(function() {
+                // Animer la respiration
+                animateBreath();
+                
+                // Démarrer le décompte
+                coherenceTimer = setInterval(function() {
+                    secondsRemaining--;
+                    updateTimerDisplay();
+                    
+                    // Si le temps est écoulé
+                    if (secondsRemaining <= 0) {
+                        stopCoherenceCardiaque();
+                        const completionText = "Excellent. Vous avez terminé les 2 minutes de cohérence cardiaque. Vous pouvez maintenant continuer vers l'étape suivante.";
+                        coherenceInstruction.textContent = completionText;
+                        queueSpeech(completionText);
+                        // Mettre en évidence le bouton suivant
+                        nextPrepBtn.classList.add('pulse-animation');
+                    }
+                }, 1000);
+            }, 5000);
+        }
+        
+        // Animation de respiration
+        function animateBreath() {
+            let phase = 'in'; // 'in' pour inspiration, 'out' pour expiration
+            let step = 0;
+            const totalSteps = 50; // 5 secondes à 10 étapes par seconde
+            
+            // Arrêter l'intervalle précédent si existant
+            if (coherenceInterval) {
+                clearInterval(coherenceInterval);
+            }
+            
+            // Démarrer l'animation
+            coherenceInterval = setInterval(function() {
+                if (phase === 'in') {
+                    // Animation d'inspiration (monter)
+                    const progress = step / totalSteps;
+                    breathCircle.style.transform = `translate(-50%, calc(-50% - ${80 * progress}px))`;
+                    
+                    // Afficher le label d'inspiration
+                    breathInLabel.style.opacity = 1;
+                    breathOutLabel.style.opacity = 0;
+                    
+            // Mettre à jour l'instruction pour l'inspiration
+                    if (step === 0) {
+                        coherenceInstruction.textContent = "Inspirez lentement...";
+                        
+                        // Utiliser un délai pour éviter de couper la voix précédente
+                        if (audioToggle.checked && !speakingInProgress) {
+                            // En mode silencieux, simplement parler
+                            speech.speak("Inspirez");
+                        }
+                    }
+                    
+                    step++;
+                    if (step >= totalSteps) {
+                        phase = 'out';
+                        step = 0;
+                    }
+                } else {
+                    // Animation d'expiration (descendre)
+                    const progress = step / totalSteps;
+                    breathCircle.style.transform = `translate(-50%, calc(-50% + ${80 * progress}px))`;
+                    
+                    // Afficher le label d'expiration
+                    breathInLabel.style.opacity = 0;
+                    breathOutLabel.style.opacity = 1;
+                    
+                    // Mettre à jour l'instruction pour l'expiration
+                    if (step === 0) {
+                        coherenceInstruction.textContent = "Expirez doucement...";
+                        
+                        // Utiliser un délai pour éviter de couper la voix précédente
+                        if (audioToggle.checked && !speakingInProgress) {
+                            // En mode silencieux, simplement parler
+                            speech.speak("Expirez");
+                        }
+                    }
+                    
+                    step++;
+                    if (step >= totalSteps) {
+                        phase = 'in';
+                        step = 0;
+                    }
+                }
+            }, 100); // 10 frames par seconde
+        }
+        
+        // Mettre à jour l'affichage du minuteur
+        function updateTimerDisplay() {
+            if (!timerDisplay) return;
+            
+            const minutes = Math.floor(secondsRemaining / 60);
+            const seconds = secondsRemaining % 60;
+            timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+        
+        // Arrêter la cohérence cardiaque
+        function stopCoherenceCardiaque() {
+            // Arrêter les intervalles
+            if (coherenceInterval) {
+                clearInterval(coherenceInterval);
+                coherenceInterval = null;
+            }
+            
+            if (coherenceTimer) {
+                clearInterval(coherenceTimer);
+                coherenceTimer = null;
+            }
+            
+            // Réinitialiser l'affichage
+            if (breathCircle) {
+                breathCircle.style.transform = 'translate(-50%, -50%)';
+            }
+            
+            if (breathInLabel) breathInLabel.style.opacity = 0;
+            if (breathOutLabel) breathOutLabel.style.opacity = 0;
+        }
+        
+        // Réinitialiser la cohérence cardiaque
+        function resetCoherenceCardiaque() {
+            // Arrêter tout
+            stopCoherenceCardiaque();
+            
+            // Réinitialiser l'affichage
+            coherenceIntro.style.display = 'block';
+            coherenceContainer.style.display = 'none';
+            secondsRemaining = 120;
+            updateTimerDisplay();
+            
+            // Retirer l'animation du bouton
+            nextPrepBtn.classList.remove('pulse-animation');
+        }
+        
+            // Démarrer l'induction
+            function startInduction() {
+                const inductionTexts = [
+                    "Fixez votre regard sur le point central de la spirale, laissez-vous absorber par ce point",
+                    "Laissez votre vision périphérique capter naturellement le mouvement circulaire",
+                    "Respirez tranquillement en vous concentrant sur la spirale qui tourne doucement",
+                    "Vos paupières peuvent devenir lourdes, c'est tout à fait normal",
+                    "Laissez-vous absorber complètement par ce motif hypnotique"
+                ];
+                
+                let count = 10;
+                let currentInstruction = 0;
+                
+                // Initialiser l'affichage
+                inductionCounter.textContent = count;
+                inductionInstruction.textContent = inductionTexts[0];
+                
+                // Attendre que la page soit bien chargée
+                setTimeout(function() {
+                    // Début de la séquence
+                    speech.speak(inductionTexts[0]);
+                    
+                    // Progression des instructions
+                    const instructionInterval = setInterval(function() {
+                        currentInstruction++;
+                        
+                        if (currentInstruction < inductionTexts.length) {
+                            inductionInstruction.textContent = inductionTexts[currentInstruction];
+                            speech.speak(inductionTexts[currentInstruction]);
+                        } else {
+                            clearInterval(instructionInterval);
+                        }
+                    }, 8000);
+                    
+                    // Décompte
+                    setTimeout(function() {
+                        startCountdown();
+                    }, 5000);
+                    
+                    function startCountdown() {
+                        if (count <= 0) {
+                            clearInterval(instructionInterval);
+                            
+                            const finalText = "Vous entrez maintenant dans un état plus profond de relaxation";
+                            inductionInstruction.textContent = finalText;
+                            speech.speak(finalText);
+                            
+                            setTimeout(function() {
+                                showPage(4); // Passer à la profondeur
+                            }, 7000);
+                            return;
+                        }
+                        
+                        count--;
+                        inductionCounter.textContent = count;
+                        
+                        setTimeout(startCountdown, 4500);
+                    }
+                }, 1000);
+            }
+        
+        // Démarrer l'approfondissement avec une synchronisation parfaite
+        function startDeepening() {
+            const deepeningTexts = [
+                "Maintenant, je vous invite à imaginer un escalier. Un escalier qui descend en spirale, confortablement.",
+                "Vous allez descendre cet escalier, marche par marche, et à chaque marche, vous vous sentirez plus détendu, plus calme.",
+                "Nous allons compter de 10 à 1, et à chaque chiffre, vous descendrez une marche, vous enfonçant plus profondément dans un état d'hypnose agréable.",
+                "Quand nous arriverons à 1, vous pourrez fermer les yeux si ce n'est pas déjà fait, et vous serez dans un état de transe profonde et confortable."
+            ];
+            
+            // Préparer les compteurs
+            let currentPhase = "intro"; // "intro", "countdown", "finale"
+            let currentStep = 0; // pour les textes d'intro
+            let stairCount = 10; // pour les marches
+            
+            // Cacher le compteur au début
+            stairsCounter.style.visibility = 'hidden';
+            stairsCounter.textContent = stairCount;
+            
+            // Créer les points lumineux pour l'animation d'escalier
+            createStairDots();
+            
+            // Attendre que la page soit bien initialisée
+            setTimeout(function() {
+                // Démarrer la séquence
+                progressSequence();
+            }, 1000);
+            
+            // Fonction récursive pour progresser dans la séquence
+            function progressSequence() {
+                if (currentPhase === "intro") {
+                    // Phase d'introduction - 4 textes d'introduction
+                    if (currentStep < deepeningTexts.length) {
+                        // Afficher et prononcer le texte actuel
+                        deepeningInstruction.textContent = deepeningTexts[currentStep];
+                        speech.speak(deepeningTexts[currentStep]);
+                        
+                        currentStep++;
+                        
+                        // Programmer la prochaine étape
+                        setTimeout(progressSequence, 10000);
+                    } else {
+                        // Fin de l'introduction, commencer le décompte
+                        currentPhase = "countdown";
+                        
+                        // Petit délai avant de commencer le décompte
+                        setTimeout(progressSequence, 2000);
+                    }
+                }
+                else if (currentPhase === "countdown") {
+                    // Phase de décompte - marches de 10 à 1
+                    if (stairCount > 0) {
+                        // Afficher le compteur pour le décompte
+                        stairsCounter.style.visibility = 'visible';
+                        stairsCounter.textContent = stairCount;
+                        
+                        // Obtenir et afficher le texte pour cette marche
+                        const stairText = getStairText(stairCount);
+                        deepeningInstruction.textContent = stairText;
+                        
+                        // Lire le texte de la marche
+                        speech.speak(stairText);
+                        
+                        stairCount--;
+                        
+                        // Programmer la prochaine marche
+                        setTimeout(progressSequence, 10000);
+                    } else {
+                        // Fin du décompte, passer à la finale
+                        currentPhase = "finale";
+                        
+                        // Cacher le compteur à la fin
+                        stairsCounter.style.visibility = 'hidden';
+                        
+                        // Petit délai avant le message final
+                        setTimeout(progressSequence, 2000);
+                    }
+                }
+                else if (currentPhase === "finale") {
+                    // Phase finale - message de conclusion et transition
+                    const finalMessage = "Vous êtes maintenant dans un état de relaxation profonde. Si ce n'est pas déjà fait, fermez doucement vos yeux et laissez-vous porter par ma voix.";
+                    deepeningInstruction.textContent = finalMessage;
+                    speech.speak(finalMessage);
+                    
+                    // Transition à la prochaine page après un délai suffisant
+                    setTimeout(function() {
+                        showPage(5); // Passer à l'exploration
+                    }, 15000);
+                }
+            }
+        }
+        
+        // Fonction d'exploration améliorée avec des animations
+        function startExploration() {
+            const explorationTexts = [
+                "Imaginez un lieu de paix et de sécurité. Un endroit où vous vous sentez parfaitement bien.",
+                "Observez les couleurs, les formes, les sons de ce lieu spécial.",
+                "Ressentez la température, les textures, les parfums qui vous entourent.",
+                "Chaque respiration approfondit votre état de relaxation et de bien-être.",
+                "Laissez votre esprit parcourir librement cet espace sécuritaire."
+            ];
+            
+            // Récupérer les éléments d'animation
+            const explorationScene = document.getElementById('explorationScene');
+            const explorationProgress = document.getElementById('explorationProgress');
+            
+            // Variables de contrôle
+            let currentTextIndex = 0;
+            const totalTexts = explorationTexts.length;
+            
+            // Fonction pour créer une particule
+            function createParticle() {
+                const particle = document.createElement('div');
+                particle.className = 'exploration-particle';
+                
+                // Position aléatoire
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 50 + Math.random() * 100;
+                const x = Math.cos(angle) * distance + 150;
+                const y = Math.sin(angle) * distance + 150;
+                
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                
+                explorationScene.appendChild(particle);
+                
+                // Animation
+                setTimeout(() => {
+                    particle.style.opacity = 0.7;
+                    const targetX = 150 + (Math.random() * 40 - 20);
+                    const targetY = 150 + (Math.random() * 40 - 20);
+                    particle.style.transform = `translate(${targetX - x}px, ${targetY - y}px)`;
+                    
+                    // Disparition après un délai
+                    setTimeout(() => {
+                        particle.style.opacity = 0;
+                        setTimeout(() => {
+                            explorationScene.removeChild(particle);
+                        }, 1000);
+                    }, 8000 + Math.random() * 4000);
+                }, 100);
+            }
+            
+            // Fonction pour créer des particules périodiquement
+            function startParticlesAnimation() {
+                const interval = setInterval(() => {
+                    if (currentTextIndex < totalTexts) {
+                        createParticle();
+                    } else {
+                        clearInterval(interval);
+                    }
+                }, 1000);
+                
+                return interval;
+            }
+            
+            // Attendre que la page soit bien initialisée
+            setTimeout(function() {
+                // Afficher la scène d'exploration
+                explorationScene.style.opacity = '1';
+                
+                // Démarrer l'animation des particules
+                const particlesInterval = startParticlesAnimation();
+                
+                // Commencer la séquence
+                progressExploration();
+                
+                function progressExploration() {
+                    if (currentTextIndex < totalTexts) {
+                        // Mettre à jour le texte
+                        explorationInstruction.textContent = explorationTexts[currentTextIndex];
+                        
+                        // Mettre à jour la barre de progression
+                        const progressPercent = ((currentTextIndex + 1) / totalTexts) * 100;
+                        explorationProgress.style.width = progressPercent + '%';
+                        
+                        // Créer une utterance avec callback pour détection précise de la fin
+                        const utterance = new SpeechSynthesisUtterance(explorationTexts[currentTextIndex]);
+                        if (speech.selectedVoice) utterance.voice = speech.selectedVoice;
+                        utterance.volume = speech.volume;
+                        utterance.rate = speech.rate;
+                        
+                        // Fréquence d'apparition des particules plus élevée à mesure que l'exploration progresse
+                        for (let i = 0; i < (currentTextIndex + 1) * 2; i++) {
+                            setTimeout(() => createParticle(), i * 500);
+                        }
+                        
+                        // Gestion de la fin de l'énoncé
+                        utterance.onend = function() {
+                            currentTextIndex++;
+                            // Attendre un moment avant de passer au texte suivant
+                            setTimeout(progressExploration, 2000);
+                        };
+                        
+                        // Prononcer le texte si l'audio est activé
+                        if (audioToggle.checked) {
+                            speech.synth.speak(utterance);
+                        } else {
+                            // Simulation si l'audio est désactivé
+                            setTimeout(() => {
+                                currentTextIndex++;
+                                setTimeout(progressExploration, 2000);
+                            }, 12000); // Durée similaire à celle d'un énoncé vocal
+                        }
+                    } else {
+                        // Message de transition à la fin
+                        setTimeout(function() {
+                            const transitionMessage = "Prenez encore quelques instants pour profiter de cet espace intérieur... Bientôt, nous allons revenir doucement à un état de conscience ordinaire.";
+                            explorationInstruction.textContent = transitionMessage;
+                            
+                            // Créer une utterance avec callback
+                            const utterance = new SpeechSynthesisUtterance(transitionMessage);
+                            if (speech.selectedVoice) utterance.voice = speech.selectedVoice;
+                            utterance.volume = speech.volume;
+                            utterance.rate = speech.rate;
+                            
+                            // Fin de l'exploration après le dernier message
+                            utterance.onend = function() {
+                                // Passer à la phase suivante après un délai
+                                setTimeout(() => showPage(6), 8000);
+                            };
+                            
+                            if (audioToggle.checked) {
+                                speech.synth.speak(utterance);
+                            } else {
+                                // Si audio désactivé, passer à la page suivante après un délai
+                                setTimeout(() => showPage(6), 15000);
+                            }
+                            
+                        }, 3000);
+                    }
+                }
+            }, 1500);
+        }
+        
+        // Démarrer le réveil
+        function startAwakening() {
+            // Réinitialiser tous les états et éléments
+            speech.stop();
+            speechQueue = [];
+            
+            const mainInstruction = document.querySelector('#page6 .instruction');
+            let count = 5;
+            awakeningCounter.textContent = count;
+            
+            // Faire apparaître progressivement la scène d'énergie
+            energyScene.style.transition = 'opacity 3s ease';
+            energyScene.style.opacity = '1';
+            
+            // Variables pour contrôler le flux et les délais
+            let phase = 0;
+            let phaseComplete = false;
+            
+            // Fonction pour avancer à la phase suivante
+            function nextPhase() {
+                phase++;
+                phaseComplete = false;
+                executeCurrentPhase();
+            }
+            
+            // Cette fonction permet de structurer les phases avec des rappels sur la fin
+            function executeCurrentPhase() {
+                switch(phase) {
+                    case 0: // Phase initiale - Introduction
+                        setTimeout(() => {
+                            const text = "Préparez-vous à revenir doucement à votre état de conscience habituel.";
+                            mainInstruction.textContent = text;
+                            
+                            const utterance = new SpeechSynthesisUtterance(text);
+                            if (speech.selectedVoice) utterance.voice = speech.selectedVoice;
+                            utterance.volume = speech.volume;
+                            utterance.rate = speech.rate;
+                            
+                            // Utiliser un callback direct plutôt que d'estimer la durée
+                            utterance.onend = function() {
+                                if (!phaseComplete) {
+                                    phaseComplete = true;
+                                    setTimeout(nextPhase, 1000); // Pause entre les phrases
+                                }
+                            };
+                            
+                            if (audioToggle.checked) {
+                                speech.synth.speak(utterance);
+                                speakingIndicator.classList.add('active');
+                            } else {
+                                // Simulation de fin si l'audio est désactivé
+                                setTimeout(() => {
+                                    if (!phaseComplete) {
+                                        phaseComplete = true;
+                                        nextPhase();
+                                    }
+                                }, 3000);
+                            }
+                        }, 2000);
+                        break;
+                        
+                    case 1: // Seconde instruction
+                        setTimeout(() => {
+                            const text = "À chaque compte, vous vous sentirez de plus en plus éveillé et alerte.";
+                            mainInstruction.textContent = text;
+                            
+                            const utterance = new SpeechSynthesisUtterance(text);
+                            if (speech.selectedVoice) utterance.voice = speech.selectedVoice;
+                            utterance.volume = speech.volume;
+                            utterance.rate = speech.rate;
+                            
+                            utterance.onend = function() {
+                                if (!phaseComplete) {
+                                    phaseComplete = true;
+                                    setTimeout(nextPhase, 1000);
+                                }
+                            };
+                            
+                            if (audioToggle.checked) {
+                                speech.synth.speak(utterance);
+                            } else {
+                                setTimeout(() => {
+                                    if (!phaseComplete) {
+                                        phaseComplete = true;
+                                        nextPhase();
+                                    }
+                                }, 3000);
+                            }
+                        }, 500);
+                        break;
+                        
+                    case 2: // Troisième instruction
+                        setTimeout(() => {
+                            const text = "Vous conserverez cette sensation de bien-être et de calme intérieur.";
+                            mainInstruction.textContent = text;
+                            
+                            const utterance = new SpeechSynthesisUtterance(text);
+                            if (speech.selectedVoice) utterance.voice = speech.selectedVoice;
+                            utterance.volume = speech.volume;
+                            utterance.rate = speech.rate;
+                            
+                            utterance.onend = function() {
+                                if (!phaseComplete) {
+                                    phaseComplete = true;
+                                    setTimeout(nextPhase, 2000); // Pause plus longue avant le décompte
+                                }
+                            };
+                            
+                            if (audioToggle.checked) {
+                                speech.synth.speak(utterance);
+                            } else {
+                                setTimeout(() => {
+                                    if (!phaseComplete) {
+                                        phaseComplete = true;
+                                        nextPhase();
+                                    }
+                                }, 3000);
+                            }
+                        }, 500);
+                        break;
+                        
+                    case 3: // Début du décompte
+                        startAwakeningCountdown();
+                        break;
+                }
+            }
+            
+            // Fonction de décompte améliorée avec des callbacks précis
+            function startAwakeningCountdown() {
+                // Si le décompte est terminé
+                if (count <= 0) {
+                    const finalMessage = "Vous êtes maintenant complètement réveillé, alerte et plein d'énergie.";
+                    mainInstruction.textContent = finalMessage;
+                    
+                    const utterance = new SpeechSynthesisUtterance(finalMessage);
+                    if (speech.selectedVoice) utterance.voice = speech.selectedVoice;
+                    utterance.volume = speech.volume;
+                    utterance.rate = speech.rate;
+                    
+                    utterance.onend = function() {
+                        // Passer à la page de complétion
+                        setTimeout(() => showPage(7), 1500);
+                    };
+                    
+                    if (audioToggle.checked) {
+                        speech.synth.speak(utterance);
+                    } else {
+                        // Si audio désactivé, passer à la page suivante après un délai
+                        setTimeout(() => showPage(7), 4000);
+                    }
+                    return;
+                }
+                
+                // Créer le texte pour ce niveau de décompte
+                const countText = getCountText(count);
+                const completeText = count.toString() + "... " + countText;
+                
+                // Afficher le texte
+                mainInstruction.textContent = completeText;
+                
+                // Créer l'énoncé avec callback précis
+                const utterance = new SpeechSynthesisUtterance(completeText);
+                if (speech.selectedVoice) utterance.voice = speech.selectedVoice;
+                utterance.volume = speech.volume;
+                utterance.rate = speech.rate;
+                
+                // À la fin de l'énoncé, passer au niveau suivant
+                utterance.onend = function() {
+                    // Décrementer le compteur
+                    count--;
+                    awakeningCounter.textContent = count;
+                    
+                    // Pause avant le prochain niveau
+                    setTimeout(startAwakeningCountdown, 1500);
+                };
+                
+                if (audioToggle.checked) {
+                    speech.synth.speak(utterance);
+                } else {
+                    // Si audio désactivé, simuler la progression
+                    count--;
+                    awakeningCounter.textContent = count;
+                    setTimeout(startAwakeningCountdown, 3000);
+                }
+            }
+            
+            // Démarrer la séquence
+            executeCurrentPhase();
+        }
+        
+        // Création dynamique des points lumineux pour l'escalier
+        function createStairDots() {
+            const container = document.getElementById('stairDotsContainer');
+            if (!container) return;
+            
+            // Vider le container d'abord
+            container.innerHTML = '';
+            
+            // Créer 20 points à des positions aléatoires
+            for (let i = 0; i < 20; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'stair-dot';
+                
+                // Position aléatoire
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const delay = Math.random() * 8; // Délai aléatoire pour l'animation
+                
+                dot.style.left = x + '%';
+                dot.style.top = y + '%';
+                dot.style.animationDelay = delay + 's';
+                
+                container.appendChild(dot);
+            }
+        }
+        
+        // Configuration des événements DOMContentLoaded
+        window.addEventListener('DOMContentLoaded', function() {
+            // Initialiser la synthèse vocale avec un léger délai
+            setTimeout(function() {
+                speech.init();
+                
+                // Message d'accueil initial
+                setTimeout(function() {
+                    const welcomeMessage = "Bienvenue dans votre séance d'auto-hypnose guidée. Cliquez sur 'Commencer la séance' lorsque vous êtes prêt.";
+                    const welcomeElement = document.querySelector('#page1 .intro-text p:first-child');
+                    queueSpeech(welcomeMessage, 0, welcomeElement);
+                }, 1500);
+            }, 500);
+            
+            // Événements des boutons
+            startBtn.addEventListener('click', function() {
+                showPage(2);
+            });
+            
+            startCoherenceBtn.addEventListener('click', function() {
+                startCoherenceCardiaque();
+            });
+            
+            nextPrepBtn.addEventListener('click', function() {
+                stopCoherenceCardiaque();
+                showPage(3);
+            });
+            
+            skipInductionBtn.addEventListener('click', function() {
+                showPage(4);
+            });
+            
+            skipDeepeningBtn.addEventListener('click', function() {
+                showPage(5);
+            });
+            
+            nextExplorationBtn.addEventListener('click', function() {
+                showPage(6);
+            });
+            
+            completeBtn.addEventListener('click', function() {
+                showPage(7);
+            });
+            
+            restartBtn.addEventListener('click', function() {
+                showPage(2);
+            });
+            
+            homeBtn.addEventListener('click', function() {
+                showPage(1);
+            });
+            
+            // Événement pour gérer l'audio
+            audioToggle.addEventListener('change', function() {
+                if (!audioToggle.checked && speech.synth) {
+                    // Arrêter proprement toute la synthèse vocale
+                    speech.stop();
+                    speechQueue = [];
+                    isSpeaking = false;
+                    waitingForNextSpeech = false;
+                } else if (audioToggle.checked) {
+                    // Si on active le son, tester avec un message
+                    speech.speak("Guidage vocal activé");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
